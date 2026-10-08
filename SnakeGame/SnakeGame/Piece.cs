@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -10,11 +8,14 @@ using System.Windows.Forms;
 
 namespace SnakeGame
 {
-    public partial class Form1 : Form
+    class Piece : Label
     {
-        public Form1()
+        public Piece(int x, int y)
         {
-            InitializeComponent();
+            Location = new Point(x, y);
+            Size = new Size(20, 20);
+            BackColor = Color.Orange;
+            Enabled = false;
         }
     }
 }
