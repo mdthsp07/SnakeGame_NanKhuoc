@@ -14,7 +14,7 @@ namespace SnakeGame
         {
             Location = new Point(x, y);
             Size = new Size(20, 20);
-            BackColor = Color.Orange;
+            BackColor = Color.Green;
             Enabled = false;
         }
     }

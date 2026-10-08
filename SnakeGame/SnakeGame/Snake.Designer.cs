@@ -37,7 +37,7 @@
             this.lblScore.AutoSize = true;
             this.lblScore.Location = new System.Drawing.Point(12, 9);
             this.lblScore.Name = "lblScore";
-            this.lblScore.Size = new System.Drawing.Size(98, 21);
+            this.lblScore.Size = new System.Drawing.Size(124, 27);
             this.lblScore.TabIndex = 0;
             this.lblScore.Text = "Score: 0";
             // 
@@ -45,15 +45,15 @@
             // 
             this.lblFood.AutoSize = true;
             this.lblFood.BackColor = System.Drawing.Color.Red;
-            this.lblFood.Location = new System.Drawing.Point(402, 172);
+            this.lblFood.Location = new System.Drawing.Point(374, 200);
             this.lblFood.Name = "lblFood";
-            this.lblFood.Size = new System.Drawing.Size(21, 21);
+            this.lblFood.Size = new System.Drawing.Size(26, 27);
             this.lblFood.TabIndex = 1;
             this.lblFood.Text = " ";
             // 
             // Snake
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 27F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 500);
             this.Controls.Add(this.lblFood);

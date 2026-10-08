@@ -21,16 +21,18 @@ namespace SnakeGame
 
         Timer timer = new Timer();
 
+        SoundManager sound = new SoundManager();
         public Snake()
         {
             InitializeComponent();
             intial();
             launchTimer();
+            sound.PlayBackground("background.wav");
         }
 
         private void launchTimer()
         {
-            timer.Interval = 50;
+            timer.Interval = 75;
             timer.Tick += move;
             timer.Start();
         }
@@ -62,6 +64,8 @@ namespace SnakeGame
             if (game_over(x + dx, y + dy))
             {
                 timer.Stop();
+                sound.PlayGameOver("gameover.wav");        
+                sound.StopBackground();
                 MessageBox.Show("Game Over");
                 return;
             }
@@ -69,6 +73,7 @@ namespace SnakeGame
             {
                 score += 1;
                 lblScore.Text = "Score: " + score.ToString();
+                sound.PlayEat("eat.wav");
                 if (hits((y + dy) / 20, (x + dx) / 20)) return;
                 Piece head = new Piece(x + dx, y + dy);
                 front = (front - 1 + 1250) % 1250;
@@ -105,6 +110,8 @@ namespace SnakeGame
             if (visit[x, y])
             {
                 timer.Stop();
+                sound.PlayGameOver("gameover.wav");          
+                sound.StopBackground();
                 MessageBox.Show("Snake Hit his Body");
                 return true;
             }
