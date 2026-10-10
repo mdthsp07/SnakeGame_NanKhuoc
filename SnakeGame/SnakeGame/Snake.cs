@@ -137,21 +137,28 @@ namespace SnakeGame
             return bmp;
         }
 
-        // Tìm đường dẫn file, ưu tiên kiểm tra thư mục "Asset"
+        // Quét siêu linh hoạt tìm tệp ảnh ở mọi thư mục Asset / Assets / bin Debug / Project
         private string FindAssetPath(string fileName)
         {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+
             string[] searchPaths = new string[]
             {
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Asset", fileName), // Ưu tiên 1: bin/Debug/Asset/
-                Path.Combine("Asset", fileName),                                        // Ưu tiên 2: Thư mục Asset tương đối
-                fileName,                                                                // Ưu tiên 3: Thư mục gốc
-                Path.Combine("..", "Asset", fileName)                                   // Ưu tiên 4: Thư mục project gốc/Asset
+                Path.Combine(baseDir, "Asset", fileName),                     // bin/Debug/Asset/
+                Path.Combine(baseDir, "Assets", fileName),                    // bin/Debug/Assets/
+                Path.Combine(baseDir, fileName),                              // bin/Debug/
+                Path.Combine(baseDir, "..", "..", "Asset", fileName),         // Project Root/Asset/
+                Path.Combine(baseDir, "..", "..", "Assets", fileName),        // Project Root/Assets/
+                Path.Combine("Asset", fileName),
+                Path.Combine("Assets", fileName),
+                fileName
             };
 
             foreach (string path in searchPaths)
             {
                 if (File.Exists(path)) return path;
             }
+
             return null;
         }
 

@@ -10,8 +10,8 @@ namespace SnakeGame
         {
             Location = new Point(x, y);
             Size = new Size(20, 20);
-            SizeMode = PictureBoxSizeMode.StretchImage; // Co giãn hình vừa khít ô 20x20
-            BackColor = Color.Transparent;             // Nền trong suốt để lộ bản đồ cỏ
+            SizeMode = PictureBoxSizeMode.StretchImage; // Co giãn hình ảnh vừa khít ô 20x20
+            BackColor = Color.Transparent;             // Nền trong suốt để lộ sân cỏ
 
             if (img != null)
             {
