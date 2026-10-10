@@ -1,17 +1,32 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Windows.Forms;
-using NAudio.Wave;
 
 namespace SnakeGame
 {
     public class SoundManager
     {
+        // ===== SINGLETON =====
+        private static SoundManager _instance;
+        public static SoundManager Instance
+        {
+            get
+            {
+                if (_instance == null) _instance = new SoundManager();
+                return _instance;
+            }
+        }
+
         private WaveOutEvent bgOutput;
         private AudioFileReader bgReader;
+        private EventHandler<StoppedEventArgs> bgPlaybackStoppedHandler;
 
         public bool IsMusicOn { get; private set; } = true;
         public bool IsSoundOn { get; private set; } = true;
 
+        public SoundManager() { }
+
+        // ===== NHẠC NỀN (LOOP) =====
         public void PlayBackground(string filePath)
         {
             try
@@ -19,7 +34,8 @@ namespace SnakeGame
                 bgReader = new AudioFileReader(filePath);
                 bgOutput = new WaveOutEvent();
                 bgOutput.Init(bgReader);
-                bgOutput.PlaybackStopped += (s, e) =>
+
+                bgPlaybackStoppedHandler = (s, e) =>
                 {
                     if (IsMusicOn && bgReader != null)
                     {
@@ -27,6 +43,8 @@ namespace SnakeGame
                         bgOutput.Play();
                     }
                 };
+                bgOutput.PlaybackStopped += bgPlaybackStoppedHandler;
+
                 bgOutput.Play();
             }
             catch (Exception ex)
@@ -35,6 +53,31 @@ namespace SnakeGame
             }
         }
 
+        public void StopBackground()
+        {
+            try
+            {
+                if (bgOutput != null)
+                {
+                    if (bgPlaybackStoppedHandler != null)
+                    {
+                        bgOutput.PlaybackStopped -= bgPlaybackStoppedHandler;
+                        bgPlaybackStoppedHandler = null;
+                    }
+                    bgOutput.Stop();
+                    bgOutput.Dispose();
+                    bgOutput = null;
+                }
+                if (bgReader != null)
+                {
+                    bgReader.Dispose();
+                    bgReader = null;
+                }
+            }
+            catch { }
+        }
+
+        // ===== ÂM THANH GAME (ONE-SHOT) =====
         public void PlayEat(string filePath)
         {
             if (!IsSoundOn) return;
@@ -47,7 +90,14 @@ namespace SnakeGame
             PlayOneShot(filePath);
         }
 
-        // Phát 1 lần, không ảnh hưởng nhạc nền
+      
+        public void PlayClick()
+        {
+            if (!IsSoundOn) return;
+            PlayOneShot("click.wav");
+        }
+
+        // ===== HÀM CHUNG PHÁT 1 LẦN =====
         private void PlayOneShot(string filePath)
         {
             try
@@ -65,25 +115,7 @@ namespace SnakeGame
             catch { }
         }
 
-        public void StopBackground()
-        {
-            try
-            {
-                if (bgOutput != null)
-                {
-                    bgOutput.PlaybackStopped -= null;   // Ngắt sự kiện
-                    bgOutput.Stop();
-                    bgOutput.Dispose();
-                    bgOutput = null;
-                }
-                if (bgReader != null)
-                {
-                    bgReader.Dispose();
-                    bgReader = null;
-                }
-            }
-            catch { }
-        }
+        // ===== BẬT/TẮT =====
         public void ToggleMusic()
         {
             IsMusicOn = !IsMusicOn;
@@ -94,6 +126,19 @@ namespace SnakeGame
         public void ToggleSound()
         {
             IsSoundOn = !IsSoundOn;
+        }
+
+        // ===== SETTER =====
+        public void SetMusicOn(bool value)
+        {
+            IsMusicOn = value;
+            if (IsMusicOn) bgOutput?.Play();
+            else bgOutput?.Pause();
+        }
+
+        public void SetSoundOn(bool value)
+        {
+            IsSoundOn = value;
         }
     }
 }

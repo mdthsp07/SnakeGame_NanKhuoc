@@ -152,6 +152,7 @@ namespace SnakeGame
             // Ấn xuống: nút lún xuống 3px + màu tối hơn
             btn.MouseDown += (s, e) =>
             {
+                SoundManager.Instance.PlayClick();
                 btn.BackColor = pressedColor;
                 btn.Location = new Point(originalLocation.X, originalLocation.Y + 3);
             };

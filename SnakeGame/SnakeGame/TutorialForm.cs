@@ -23,8 +23,8 @@ namespace SnakeGame
         {
             Label lblTitle = new Label
             {
-                Text = "HOW TO PLAY",
-                Font = new Font("Courier New", 20, FontStyle.Bold),
+                Text = "𝓗𝓞𝓦 𝓣𝓞 𝓟𝓛𝓐𝓨",
+                Font = new Font("Courier New", 25, FontStyle.Bold),
                 ForeColor = Color.FromArgb(100, 200, 255),
                 BackColor = Color.Transparent,
                 AutoSize = false,
@@ -36,17 +36,16 @@ namespace SnakeGame
 
             Label lblContent = new Label
             {
-                Text = "• Use ARROW KEYS to control the snake.\n\n" +
-                       "• Eat fruits to grow and gain points.\n\n" +
-                       "• Avoid walls, rocks, and yourself!\n\n" +
-                       "• Use ⚙ SETTINGS to toggle music.",
-                Font = new Font("Courier New", 11, FontStyle.Regular),
+                Text =  "𝓤𝓼𝓮 𝓐𝓡𝓡𝓞𝓦 𝓚𝓔𝓨𝓢 𝓽𝓸 𝓬𝓸𝓷𝓽𝓻𝓸𝓵 𝓽𝓱𝓮 𝓼𝓷𝓪𝓴𝓮.\n\n" +
+                        "𝓔𝓪𝓽 𝓯𝓻𝓾𝓲𝓽𝓼 𝓽𝓸 𝓰𝓻𝓸𝔀 𝓪𝓷𝓭 𝓰𝓪𝓲𝓷 𝓹𝓸𝓲𝓷𝓽𝓼.\n\n" +
+                        "𝓐𝓿𝓸𝓲𝓭 𝔀𝓪𝓵𝓵𝓼 𝓪𝓷𝓭 𝔂𝓸𝓾𝓻𝓼𝓮𝓵𝓯! 𝓰𝓸𝓸𝓭 𝓵𝓾𝓬𝓴!",
+                Font = new Font("Courier New", 15, FontStyle.Regular),
                 ForeColor = Color.White,
                 BackColor = Color.Transparent,
                 AutoSize = false,
-                Size = new Size(400, 200),
-                Location = new Point(30, 100),
-                TextAlign = ContentAlignment.TopLeft
+                Size = new Size(430, 230),
+                Location = new Point(10, 105),
+                TextAlign = ContentAlignment.MiddleCenter
             };
             this.Controls.Add(lblContent);
 
@@ -55,7 +54,7 @@ namespace SnakeGame
                 Text = "GOT IT!",
                 Font = new Font("Courier New", 12, FontStyle.Bold),
                 Size = new Size(180, 45),
-                Location = new Point(135, 320),
+                Location = new Point(135, 340),
                 BackColor = Color.FromArgb(33, 150, 243),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
