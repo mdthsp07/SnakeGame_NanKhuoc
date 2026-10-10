@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using NAudio.Wave;
 
@@ -9,29 +10,40 @@ namespace SnakeGame
         private WaveOutEvent bgOutput;
         private AudioFileReader bgReader;
 
-        public bool IsMusicOn { get; private set; } = true;
-        public bool IsSoundOn { get; private set; } = true;
+        public bool IsMusicOn { get; set; } = true;
+        public bool IsSoundOn { get; set; } = true;
 
         public void PlayBackground(string filePath)
         {
+            if (!IsMusicOn || string.IsNullOrEmpty(filePath) || !File.Exists(filePath)) return;
+
             try
             {
+                StopBackground(); // Dọn dẹp luồng cũ nếu có
+
                 bgReader = new AudioFileReader(filePath);
                 bgOutput = new WaveOutEvent();
                 bgOutput.Init(bgReader);
-                bgOutput.PlaybackStopped += (s, e) =>
-                {
-                    if (IsMusicOn && bgReader != null)
-                    {
-                        bgReader.Position = 0;
-                        bgOutput.Play();
-                    }
-                };
+
+                bgOutput.PlaybackStopped += OnBgmPlaybackStopped;
                 bgOutput.Play();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi nhạc nền: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("Lỗi phát nhạc nền: " + ex.Message);
+            }
+        }
+
+        private void OnBgmPlaybackStopped(object sender, StoppedEventArgs e)
+        {
+            if (IsMusicOn && bgReader != null && bgOutput != null)
+            {
+                try
+                {
+                    bgReader.Position = 0;
+                    bgOutput.Play();
+                }
+                catch { }
             }
         }
 
@@ -47,9 +59,10 @@ namespace SnakeGame
             PlayOneShot(filePath);
         }
 
-        // Phát 1 lần, không ảnh hưởng nhạc nền
         private void PlayOneShot(string filePath)
         {
+            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath)) return;
+
             try
             {
                 var reader = new AudioFileReader(filePath);
@@ -71,7 +84,7 @@ namespace SnakeGame
             {
                 if (bgOutput != null)
                 {
-                    bgOutput.PlaybackStopped -= null;   // Ngắt sự kiện
+                    bgOutput.PlaybackStopped -= OnBgmPlaybackStopped;
                     bgOutput.Stop();
                     bgOutput.Dispose();
                     bgOutput = null;
@@ -84,11 +97,19 @@ namespace SnakeGame
             }
             catch { }
         }
+
         public void ToggleMusic()
         {
             IsMusicOn = !IsMusicOn;
-            if (IsMusicOn) bgOutput?.Play();
-            else bgOutput?.Pause();
+            if (IsMusicOn)
+            {
+                if (bgOutput != null) bgOutput.Play();
+                else PlayBackground("background.wav");
+            }
+            else
+            {
+                bgOutput?.Pause();
+            }
         }
 
         public void ToggleSound()
