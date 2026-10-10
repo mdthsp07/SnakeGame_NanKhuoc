@@ -32,7 +32,7 @@ namespace SnakeGame
 
         private void launchTimer()
         {
-            timer.Interval = 75;
+            timer.Interval = 100;
             timer.Tick += move;
             timer.Start();
         }
@@ -66,7 +66,7 @@ namespace SnakeGame
                 timer.Stop();
                 sound.PlayGameOver("gameover.wav");        
                 sound.StopBackground();
-                MessageBox.Show("Game Over");
+                ShowGameOver();
                 return;
             }
             if (collisionFood(x + dx, y + dy))
@@ -112,7 +112,7 @@ namespace SnakeGame
                 timer.Stop();
                 sound.PlayGameOver("gameover.wav");          
                 sound.StopBackground();
-                MessageBox.Show("Snake Hit his Body");
+                ShowGameOver();
                 return true;
             }
             return false;
@@ -144,6 +144,83 @@ namespace SnakeGame
             visit[head.Location.Y / 20, head.Location.X / 20] = true;
             available.Remove(head.Location.Y / 20 * cols + head.Location.X / 20);
             Controls.Add(head); snake[front] = head;
+        }
+
+        private void ShowGameOver()
+        {
+            // Lấy điểm cao nhất từ file (nếu có)
+            int highScore = score;   // Tạm thời, bạn khác sẽ làm phần đọc file
+
+            // Mở form GameOver
+            using (GameOverForm gameOver = new GameOverForm(score, highScore))
+            {
+                DialogResult result = gameOver.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    switch (gameOver.SelectedAction)
+                    {
+                        case GameOverForm.GameAction.PlayAgain:
+                            RestartGame();
+                            break;
+
+                        case GameOverForm.GameAction.ViewHighScore:
+                            // Mở HighScoreForm (bạn khác sẽ làm)
+                            // HighScoreForm hsForm = new HighScoreForm();
+                            // hsForm.ShowDialog();
+                            // Sau khi xem xong, quay lại GameOver
+                            ShowGameOver();
+                            break;
+
+                        case GameOverForm.GameAction.MainMenu:
+                            this.Close(); // Đóng game, quay về Menu (nếu có)
+                            break;
+                    }
+                }
+                else
+                {
+                    this.Close();
+                }
+            }
+        }
+
+        private void RestartGame()
+        {
+            // Dừng timer cũ, gỡ sạch sự kiện
+            timer.Stop();
+            timer.Tick -= move;
+
+            // Reset toàn bộ game
+            score = 0;
+            dx = 0;
+            dy = 0;
+            front = 0;
+            back = 0;
+            lblScore.Text = "Score: 0";
+
+            // Xóa hết các Piece cũ
+            for (int i = 0; i < 1250; i++)
+            {
+                if (snake[i] != null)
+                {
+                    Controls.Remove(snake[i]);
+                    snake[i] = null;
+                }
+            }
+
+            // Reset mảng visit và available
+            available.Clear();
+            for (int i = 0; i < rows; i++)
+                for (int j = 0; j < cols; j++)
+                {
+                    visit[i, j] = false;
+                    available.Add(i * cols + j);
+                }
+
+            // Tạo lại rắn và mồi
+            intial();
+            sound.PlayBackground("background.wav");
+            launchTimer();
         }
     }
 }
