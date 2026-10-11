@@ -170,7 +170,10 @@ namespace SnakeGame
         // ==================== GAME OVER ====================
         private void ShowGameOver()
         {
-            int highScore = score;   // Tạm thời, bạn khác sẽ làm phần đọc file
+            LeaderBoardForm.Save(score);
+
+            int highScore = score;
+
 
             using (GameOverForm gameOver = new GameOverForm(score, highScore))
             {
@@ -185,8 +188,11 @@ namespace SnakeGame
                             break;
 
                         case GameOverForm.GameAction.ViewHighScore:
-                            // HighScoreForm hsForm = new HighScoreForm();
-                            // hsForm.ShowDialog();
+                            
+                            LeaderBoardForm leaderboard = new LeaderBoardForm(score);
+                            leaderboard.ShowDialog();
+
+                            
                             ShowGameOver();
                             break;
 
@@ -204,7 +210,7 @@ namespace SnakeGame
 
         private void StartCountdown()
         {
-            // Tạo label đếm ngược ở giữa màn hình
+         
             Label lblCountdown = new Label
             {
                 Text = "3",
@@ -236,16 +242,15 @@ namespace SnakeGame
                 }
                 else
                 {
-                    // Kết thúc đếm ngược
+                 
                     countdownTimer.Stop();
                     countdownTimer.Dispose();
                     this.Controls.Remove(lblCountdown);
                     lblCountdown.Dispose();
 
-                    // Nếu người chơi CHƯA bấm phím nào → chọn hướng mặc định an toàn
                     if (nextDx == 0 && nextDy == 0)
                     {
-                        // Nếu rắn ở nửa phải bàn → đi trái, ngược lại đi phải
+                        
                         if (snake[front].Location.X > 490)
                         {
                             nextDx = -20; nextDy = 0;
@@ -256,7 +261,6 @@ namespace SnakeGame
                         }
                     }
 
-                    // Bắt đầu chạy
                     launchTimer();
                 }
             };

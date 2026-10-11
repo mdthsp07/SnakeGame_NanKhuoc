@@ -61,7 +61,11 @@ namespace SnakeGame
                 Cursor = Cursors.Hand
             };
             btnClose.FlatAppearance.BorderSize = 0;
-            btnClose.Click += (s, e) => this.Close();
+            btnClose.Click += (s, e) =>
+            {
+                SoundManager.Instance.PlayClick();   
+                this.Close();                     
+            };
             this.Controls.Add(btnClose);
         }
     }

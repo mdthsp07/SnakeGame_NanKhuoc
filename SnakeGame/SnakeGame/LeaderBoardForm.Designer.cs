@@ -1,4 +1,4 @@
-﻿namespace SnakeGame
+﻿﻿namespace SnakeGame
 {
     partial class LeaderBoardForm
     {
@@ -74,7 +74,7 @@
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(301, 41);
             this.lblTitle.TabIndex = 2;
-            this.lblTitle.Text = "BẢNG XẾP HẠNG";
+            this.lblTitle.Text = "LEADERBOARD";
             this.lblTitle.Click += new System.EventHandler(this.lblTitle_Click);
             // 
             // LeaderBoardForm

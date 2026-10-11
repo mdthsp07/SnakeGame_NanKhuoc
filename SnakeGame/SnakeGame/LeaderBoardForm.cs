@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿﻿using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -18,15 +18,15 @@ namespace SnakeGame
             public string Ten { get; set; }
             public int Diem { get; set; }
         }
-
+        private int currentScore;
         string filePath = "highscore.txt"; 
 
-        public LeaderBoardForm()
+        public LeaderBoardForm(int playerCurrentScore = 0)
         {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.None;
             this.StartPosition = FormStartPosition.CenterScreen;
-
+            this.currentScore = playerCurrentScore;
             CapNhatBangXepHang();
         }
 
@@ -74,7 +74,8 @@ namespace SnakeGame
             }
 
             BangDiem.Items.Add("--------------------------------");
-            BangDiem.Items.Add($" Điểm cao nhất: " + playerScore + " điểm");
+            BangDiem.Items.Add($" Highest score: " + playerScore + " điểm");
+            BangDiem.Items.Add($" Last Score: " + currentScore + " điểm");
         }
 
         private int readScore()
@@ -105,6 +106,7 @@ namespace SnakeGame
 
         private void button1_Click(object sender, EventArgs e)
         {
+            SoundManager.Instance.PlayClick();
             this.Close();
         }
 

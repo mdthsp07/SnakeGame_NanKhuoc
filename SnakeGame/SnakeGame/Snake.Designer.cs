@@ -74,6 +74,7 @@
 
         private System.Windows.Forms.Label lblScore;
         private System.Windows.Forms.Label lblFood;
+
     }
 }
 

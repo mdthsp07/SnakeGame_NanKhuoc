@@ -10,10 +10,10 @@ namespace SnakeGame
         public enum GameAction { PlayAgain, ViewHighScore, MainMenu }
         public GameAction SelectedAction { get; private set; } = GameAction.MainMenu;
 
-        // Giữ lại để truyền cho HighScoreForm sau này (bạn khác làm)
+
         public int FinalScore { get; private set; }
         public int HighScore { get; private set; }
-
+        private Timer fadeTimer;
         public GameOverForm(int score, int highScore)
         {
             InitializeComponent();
@@ -23,7 +23,7 @@ namespace SnakeGame
            
             this.FormBorderStyle = FormBorderStyle.None;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Size = new Size(500, 550);   // ← Đã giảm từ 620 → 550
+            this.Size = new Size(500, 550);   
             this.BackColor = Color.FromArgb(30, 30, 45);
             this.DoubleBuffered = true;
             this.KeyPreview = true;
@@ -31,7 +31,7 @@ namespace SnakeGame
             SetupUI();
             SetupFadeIn();
 
-            //============= Cho phép kéo form bằng chuột================//
+        
             this.MouseDown += (s, e) =>
             {
                 if (e.Button == MouseButtons.Left)
@@ -44,7 +44,7 @@ namespace SnakeGame
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            // Vẽ ảnh nền nếu có
+            
             try
             {
                 Image bg = Image.FromFile("gameover_bg.jpg");
@@ -53,9 +53,21 @@ namespace SnakeGame
             }
             catch
             {
-                // Nếu không tìm thấy ảnh → dùng màu đặc
+            
                 e.Graphics.Clear(Color.FromArgb(30, 30, 45));
             }
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+       
+            if (fadeTimer != null)
+            {
+                fadeTimer.Stop();
+                fadeTimer.Dispose();
+                fadeTimer = null;
+            }
+            base.OnFormClosing(e);
         }
         private void SetupUI()
         {
@@ -137,7 +149,7 @@ namespace SnakeGame
             Color pressedColor = ControlPaint.Dark(backColor, 0.2f);
             Point originalLocation = location;
 
-            // Hover: đổi màu + dịch lên 2px
+         
             btn.MouseEnter += (s, e) =>
             {
                 btn.BackColor = hoverColor;
@@ -149,7 +161,7 @@ namespace SnakeGame
                 btn.Location = originalLocation;
             };
 
-            // Ấn xuống: nút lún xuống 3px + màu tối hơn
+           
             btn.MouseDown += (s, e) =>
             {
                 SoundManager.Instance.PlayClick();
@@ -178,17 +190,24 @@ namespace SnakeGame
         }
         private void SetupFadeIn()
         {
-            this.Opacity = 0;                          // Bắt đầu từ mờ hoàn toàn
-            Timer fadeTimer = new Timer { Interval = 15 };   // 15ms mỗi lần cập nhật
+            this.Opacity = 0;                         
+            fadeTimer = new Timer { Interval = 15 };   
             fadeTimer.Tick += (s, e) =>
-            {
+            {           
+                if (this.IsDisposed)
+                {
+                    fadeTimer.Stop();
+                    fadeTimer.Dispose();
+                    return;
+                }
+
                 if (this.Opacity < 1)
-                    this.Opacity += 0.05;              // Mỗi tick tăng 5% độ rõ
+                    this.Opacity += 0.05;
                 else
                 {
-                    this.Opacity = 1;                  // Đảm bảo dừng ở 100%
+                    this.Opacity = 1;
                     fadeTimer.Stop();
-                    fadeTimer.Dispose();               // Giải phóng timer
+                    fadeTimer.Dispose();
                 }
             };
             fadeTimer.Start();
@@ -204,11 +223,11 @@ namespace SnakeGame
             shake.Tick += (s, e) =>
             {
                 tick++;
-                // Rung NHẸ: chỉ 2 pixel mỗi bên
+                
                 int offsetX = (tick % 2 == 0) ? 2 : -2;
                 lbl.Location = new Point(originalX + offsetX, originalY);
 
-                // Rung 8 lần (khoảng 0.4 giây) rồi dừng
+              
                 if (tick >= 8)
                 {
                     shake.Stop();
@@ -217,7 +236,7 @@ namespace SnakeGame
                 }
             };
 
-            // Đợi 200ms cho Fade In xong rồi mới rung
+
             Timer delay = new Timer { Interval = 200 };
             delay.Tick += (s, e) =>
             {
