@@ -174,6 +174,9 @@
     <Content Include="gameover.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\gift_box.png" />
+    <None Include="Resources\apple.png" />
+    <None Include="Resources\grass_bg.jpeg" />
     <None Include="Resources\daaece34463f6b599008ced4b7c0c280.jpg" />
     <None Include="Resources\gameover_bg.jpg" />
     <None Include="Resources\menu_bg.jpg" />

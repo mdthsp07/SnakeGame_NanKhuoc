@@ -8,14 +8,17 @@ using System.Windows.Forms;
 
 namespace SnakeGame
 {
-    class Piece : Label
+    public class Piece : PictureBox
     {
-        public Piece(int x, int y)
+        public Piece(int x, int y, Image image = null)
         {
             Location = new Point(x, y);
             Size = new Size(20, 20);
-            BackColor = Color.Green;
+            BackColor = Color.Transparent;
+            SizeMode = PictureBoxSizeMode.Zoom;
             Enabled = false;
+            if (image != null)
+                Image = image;
         }
     }
 }
