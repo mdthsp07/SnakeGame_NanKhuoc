@@ -129,40 +129,10 @@ namespace SnakeGame
             bombLifetime -= bombTimer.Interval;
             if (bombLifetime <= 0)
             {
-                // hide current bomb
+                // hide current bomb and stop timer; next bomb will be spawned by SpawnBomb()
                 picBomb.Visible = false;
                 isBombActive = false;
-
-                // choose a new random free position and show new bomb
-                List<int> free = new List<int>();
-                for (int i = 0; i < rows; i++)
-                    for (int j = 0; j < cols; j++)
-                        if (!visit[i, j]) free.Add(i * cols + j);
-
-                if (free.Count == 0)
-                {
-                    bombTimer.Stop();
-                    return;
-                }
-
-                int foodPos = (picFood.Top / 20) * cols + (picFood.Left / 20);
-                free.RemoveAll(v => v == foodPos);
-                if (free.Count == 0)
-                {
-                    bombTimer.Stop();
-                    return;
-                }
-
-                int bidx = rand.Next(free.Count);
-                int pos = free[bidx];
-                picBomb.Left = (pos * 20) % Width;
-                picBomb.Top = (pos * 20) / Width * 20;
-                picBomb.Image = bombImage;
-                picBomb.Visible = true;
-                picBomb.BringToFront();
-                isBombActive = true;
-                bombLifetime = BOMB_LIFETIME_MS;
-                // continue timer
+                bombTimer.Stop();
             }
         }
 
