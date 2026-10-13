@@ -18,43 +18,41 @@ namespace SnakeGame
         Timer timer = new Timer();
         SoundManager sound = SoundManager.Instance;
 
-        // ===== ẢNH =====
+        // ===== IMAGES =====
         private Image headLeft, headRight, headUp, headDown;
         private Image bodyImage;
         private Image tailImage;
         private Image foodImage;
-<<<<<<< HEAD
-=======
         private Image bombImage;
->>>>>>> origin/master
         private Image giftImage;
 
-        // ===== HỘP QUÀ =====
+        // ===== GIFT =====
         private Timer giftTimer;
         private bool isGiftActive = false;
         private int giftLifetime = 0;
         private const int GIFT_LIFETIME_MS = 5000;
         private const int GIFT_BONUS = 5;
         private const int GIFT_SPAWN_CHANCE = 15;
+
+        // ===== BOMB =====
         private const int BOMB_SPAWN_CHANCE = 15;
+        private const int BOMB_LIFETIME_MS = 5000;
         private bool isBombActive = false;
-<<<<<<< HEAD
-=======
-        private const int BOMB_SPAWN_CHANCE = 15;
-        private bool isBombActive = false;
->>>>>>> origin/master
+        private Timer bombTimer;
+        private int bombLifetime = 0;
 
         public Snake()
         {
             InitializeComponent();
             LoadImages();
             InitializeGift();
+            InitializeBomb();
             intial();
             StartCountdown();
             sound.PlayBackground("background.wav");
         }
 
-        // ===== LOAD ẢNH =====
+        // ===== LOAD IMAGES =====
         private void LoadImages()
         {
             try
@@ -62,17 +60,14 @@ namespace SnakeGame
                 bodyImage = Properties.Resources.snake_body;
                 tailImage = Properties.Resources.snake_tail;
                 foodImage = Properties.Resources.apple;
-<<<<<<< HEAD
-=======
                 bombImage = Properties.Resources.daaece34463f6b599008ced4b7c0c280;
->>>>>>> origin/master
                 giftImage = Properties.Resources.gift_box;
 
                 Image origHead = Properties.Resources.snake_head;
 
-                // Ảnh gốc hướng trái
+                // original head pointing left
                 headLeft = origHead;
-                headRight = Flip(origHead);           // lật ngang
+                headRight = Flip(origHead);
                 headUp = Rotate(origHead, RotateFlipType.Rotate90FlipNone);
                 headDown = Rotate(origHead, RotateFlipType.Rotate270FlipNone);
             }
@@ -99,10 +94,10 @@ namespace SnakeGame
             if (dx > 0) return headRight;
             if (dy < 0) return headUp;
             if (dy > 0) return headDown;
-            return headLeft; // mặc định
+            return headLeft;
         }
 
-        // ===== KHỞI TẠO HỘP QUÀ =====
+        // ===== GIFT =====
         private void InitializeGift()
         {
             giftTimer = new Timer { Interval = 100 };
@@ -120,7 +115,83 @@ namespace SnakeGame
             }
         }
 
-        // ===== ĐỒNG HỒ ĐẾM NGƯỢC =====
+        // ===== BOMB =====
+        private void InitializeBomb()
+        {
+            bombTimer = new Timer { Interval = 100 };
+            bombTimer.Tick += BombTimer_Tick;
+            picBomb.Visible = false;
+            isBombActive = false;
+        }
+
+        private void BombTimer_Tick(object sender, EventArgs e)
+        {
+            bombLifetime -= bombTimer.Interval;
+            if (bombLifetime <= 0)
+            {
+                // hide current bomb
+                picBomb.Visible = false;
+                isBombActive = false;
+
+                // choose a new random free position and show new bomb
+                List<int> free = new List<int>();
+                for (int i = 0; i < rows; i++)
+                    for (int j = 0; j < cols; j++)
+                        if (!visit[i, j]) free.Add(i * cols + j);
+
+                if (free.Count == 0)
+                {
+                    bombTimer.Stop();
+                    return;
+                }
+
+                int foodPos = (picFood.Top / 20) * cols + (picFood.Left / 20);
+                free.RemoveAll(v => v == foodPos);
+                if (free.Count == 0)
+                {
+                    bombTimer.Stop();
+                    return;
+                }
+
+                int bidx = rand.Next(free.Count);
+                int pos = free[bidx];
+                picBomb.Left = (pos * 20) % Width;
+                picBomb.Top = (pos * 20) / Width * 20;
+                picBomb.Image = bombImage;
+                picBomb.Visible = true;
+                picBomb.BringToFront();
+                isBombActive = true;
+                bombLifetime = BOMB_LIFETIME_MS;
+                // continue timer
+            }
+        }
+
+        private void SpawnBomb()
+        {
+            List<int> free = new List<int>();
+            for (int i = 0; i < rows; i++)
+                for (int j = 0; j < cols; j++)
+                    if (!visit[i, j]) free.Add(i * cols + j);
+
+            if (free.Count == 0) return;
+
+            int foodPos = (picFood.Top / 20) * cols + (picFood.Left / 20);
+            free.RemoveAll(v => v == foodPos);
+            if (free.Count == 0) return;
+
+            int idx = rand.Next(free.Count);
+            int pos = free[idx];
+            picBomb.Left = (pos * 20) % Width;
+            picBomb.Top = (pos * 20) / Width * 20;
+            picBomb.Image = bombImage;
+            picBomb.Visible = true;
+            picBomb.BringToFront();
+            isBombActive = true;
+            bombLifetime = BOMB_LIFETIME_MS;
+            bombTimer.Start();
+        }
+
+        // ===== COUNTDOWN =====
         private void launchTimer()
         {
             timer.Interval = GameSettings.GetSnakeInterval();
@@ -129,7 +200,7 @@ namespace SnakeGame
             timer.Start();
         }
 
-        // ===== ĐIỀU KHIỂN =====
+        // ===== INPUT =====
         private void Snake_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -149,7 +220,7 @@ namespace SnakeGame
             }
         }
 
-        // ===== DI CHUYỂN =====
+        // ===== MOVE =====
         private void move(object sender, EventArgs e)
         {
             if (nextDx != 0 || nextDy != 0)
@@ -170,9 +241,7 @@ namespace SnakeGame
                 return;
             }
 
-<<<<<<< HEAD
-=======
-            // If moving into a bomb, immediate game over
+            // bomb collision
             if (collisionBomb(x + dx, y + dy))
             {
                 timer.Stop();
@@ -182,7 +251,6 @@ namespace SnakeGame
                 return;
             }
 
->>>>>>> origin/master
             bool ateFood = collisionFood(x + dx, y + dy);
             bool ateGift = isGiftActive &&
                            (x + dx) == picGift.Location.X &&
@@ -203,7 +271,6 @@ namespace SnakeGame
 
                 if (hits((y + dy) / 20, (x + dx) / 20)) return;
 
-                // Đầu cũ chuyển thành thân (chỉ khi có nhiều hơn 1 đốt)
                 if (front != back)
                 {
                     snake[front].Image = bodyImage;
@@ -218,37 +285,10 @@ namespace SnakeGame
 
                 if (ateFood) randomFood();
 
-<<<<<<< HEAD
-=======
-                // After food spawn, possibly spawn a bomb at a different available cell
+                // After eating, possibly spawn bomb
                 if (!isBombActive && rand.Next(100) < BOMB_SPAWN_CHANCE)
                 {
-                    // pick a free cell different from current food
-                    List<int> free = new List<int>(available);
-                    if (free.Count > 0)
-                    {
-                        // remove current food position (just in case)
-                        int foodPos = (picFood.Top / 20) * cols + (picFood.Left / 20);
-                        free.RemoveAll(v => v == foodPos);
-                        if (free.Count > 0)
-                        {
-                            int bidx = rand.Next(free.Count);
-                            int pos = free[bidx];
-                            picBomb.Left = (pos * 20) % Width;
-                            picBomb.Top = (pos * 20) / Width * 20;
-                            picBomb.Image = bombImage;
-                            picBomb.Visible = true;
-                            picBomb.BringToFront();
-                            isBombActive = true;
-                        }
-                    }
-                }
-
->>>>>>> origin/master
-                // 15% cơ hội sinh hộp quà sau khi ăn thức ăn thường
-                if (ateFood && !isGiftActive && rand.Next(100) < GIFT_SPAWN_CHANCE)
-                {
-                    SpawnGift();
+                    SpawnBomb();
                 }
 
                 UpdateSnakeImages();
@@ -256,8 +296,6 @@ namespace SnakeGame
             else
             {
                 if (hits((y + dy) / 20, (x + dx) / 20)) return;
-
-                Piece oldHead = snake[front];
 
                 visit[snake[back].Location.Y / 20, snake[back].Location.X / 20] = false;
                 front = (front - 1 + 1250) % 1250;
@@ -270,24 +308,20 @@ namespace SnakeGame
             }
         }
 
-        // ===== CẬP NHẬT ẢNH ĐẦU/THÂN/ĐUÔI =====
+        // ===== UPDATE IMAGES =====
         private void UpdateSnakeImages()
         {
             if (snake[front] == null) return;
 
-            // Chỉ 1 đốt
             if (front == back)
             {
                 snake[front].Image = GetHeadImage(dx, dy);
                 return;
             }
 
-            // Đầu
             snake[front].Image = GetHeadImage(dx, dy);
-            // Đuôi
             snake[back].Image = tailImage;
 
-            // Thân (các đốt ở giữa)
             int i = (front + 1) % 1250;
             while (i != back)
             {
@@ -297,7 +331,7 @@ namespace SnakeGame
             }
         }
 
-        // ===== SINH HỘP QUÀ =====
+        // ===== SPAWN GIFT =====
         private void SpawnGift()
         {
             available.Clear();
@@ -320,7 +354,7 @@ namespace SnakeGame
             giftTimer.Start();
         }
 
-        // ===== SINH THỨC ĂN =====
+        // ===== SPAWN FOOD =====
         private void randomFood()
         {
             available.Clear();
@@ -338,20 +372,17 @@ namespace SnakeGame
             picFood.BringToFront();
         }
 
-        // ===== KIỂM TRA VA CHẠM =====
+        // ===== COLLISIONS =====
         private bool collisionFood(int x, int y)
         {
             return x == picFood.Location.X && y == picFood.Location.Y;
         }
 
-<<<<<<< HEAD
-=======
         private bool collisionBomb(int x, int y)
         {
             return isBombActive && x == picBomb.Location.X && y == picBomb.Location.Y;
         }
 
->>>>>>> origin/master
         private bool hits(int x, int y)
         {
             if (x < 0 || y < 0 || x >= rows || y >= cols) return false;
@@ -373,7 +404,7 @@ namespace SnakeGame
 
         private void lblScore_Click(object sender, EventArgs e) { }
 
-        // ===== KHỞI TẠO BAN ĐẦU =====
+        // ===== INITIALIZE =====
         private void intial()
         {
             visit = new bool[rows, cols];
@@ -431,7 +462,7 @@ namespace SnakeGame
             }
         }
 
-        // ===== ĐẾM NGƯỢC =====
+        // ===== COUNTDOWN UI =====
         private void StartCountdown()
         {
             Label lblCountdown = new Label
@@ -476,7 +507,7 @@ namespace SnakeGame
             countdownTimer.Start();
         }
 
-        // ===== CHƠI LẠI =====
+        // ===== RESTART =====
         private void RestartGame()
         {
             timer.Stop();
@@ -503,10 +534,15 @@ namespace SnakeGame
                     available.Add(i * cols + j);
                 }
 
-            // Reset hộp quà
+            // Reset gift
             picGift.Visible = false;
             isGiftActive = false;
             giftTimer.Stop();
+
+            // Reset bomb
+            picBomb.Visible = false;
+            isBombActive = false;
+            if (bombTimer != null) bombTimer.Stop();
 
             intial();
             sound.PlayBackground("background.wav");

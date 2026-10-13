@@ -31,15 +31,10 @@
             this.lblScore = new System.Windows.Forms.Label();
             this.picFood = new System.Windows.Forms.PictureBox();
             this.picGift = new System.Windows.Forms.PictureBox();
-<<<<<<< HEAD
-            ((System.ComponentModel.ISupportInitialize)(this.picFood)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picGift)).BeginInit();
-=======
             this.picBomb = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.picFood)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picGift)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBomb)).BeginInit();
->>>>>>> origin/master
             this.SuspendLayout();
             // 
             // lblScore
@@ -77,8 +72,6 @@
             this.picGift.TabStop = false;
             this.picGift.Visible = false;
             // 
-<<<<<<< HEAD
-=======
             // picBomb
             // 
             this.picBomb.BackColor = System.Drawing.Color.Transparent;
@@ -91,17 +84,12 @@
             this.picBomb.TabStop = false;
             this.picBomb.Visible = false;
             // 
->>>>>>> origin/master
             // Snake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 27F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::SnakeGame.Properties.Resources.grass_bg;
             this.ClientSize = new System.Drawing.Size(1000, 500);
-<<<<<<< HEAD
-=======
-            this.Controls.Add(this.picBomb);
->>>>>>> origin/master
             this.Controls.Add(this.picBomb);
             this.Controls.Add(this.picGift);
             this.Controls.Add(this.picFood);
@@ -116,10 +104,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.picFood)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picGift)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBomb)).EndInit();
-<<<<<<< HEAD
-=======
-            ((System.ComponentModel.ISupportInitialize)(this.picBomb)).EndInit();
->>>>>>> origin/master
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -130,10 +114,7 @@
         private System.Windows.Forms.Label lblScore;
         private System.Windows.Forms.PictureBox picFood;
         private System.Windows.Forms.PictureBox picGift;
-<<<<<<< HEAD
-=======
         private System.Windows.Forms.PictureBox picBomb;
->>>>>>> origin/master
     }
 }
 
