@@ -82,6 +82,7 @@
     <Compile Include="GameOverForm.Designer.cs">
       <DependentUpon>GameOverForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameSettings.cs" />
     <Compile Include="LeaderBoardForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +97,12 @@
     </Compile>
     <Compile Include="Piece.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Snake.cs">
       <SubType>Form</SubType>
@@ -131,6 +138,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Snake.resx">
       <DependentUpon>Snake.cs</DependentUpon>
     </EmbeddedResource>
@@ -164,6 +174,7 @@
     <Content Include="gameover.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\daaece34463f6b599008ced4b7c0c280.jpg" />
     <None Include="Resources\gameover_bg.jpg" />
     <None Include="Resources\menu_bg.jpg" />
     <None Include="Resources\logo.png" />

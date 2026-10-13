@@ -32,11 +32,12 @@ namespace SnakeGame
             fadeTimer.Start();
         }
 
-        // ===== GẮN HIỆU ỨNG HOVER + CLICK CHO NÚT =====
+        
         private void AttachButtonEffects()
         {
             AttachEffectToButton(btnPlay, Color.FromArgb(76, 175, 80));
             AttachEffectToButton(btnTutorial, Color.FromArgb(255, 152, 0));
+            AttachEffectToButton(btnSettings, Color.FromArgb(187, 143, 206));
             AttachEffectToButton(btnExit, Color.FromArgb(180, 50, 50));
         }
 
@@ -106,6 +107,13 @@ namespace SnakeGame
         {
             SoundManager.Instance.PlayClick();
             Application.Exit();
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            SoundManager.Instance.PlayClick();
+            SettingsForm settings = new SettingsForm();
+            settings.ShowDialog();
         }
     }
 }

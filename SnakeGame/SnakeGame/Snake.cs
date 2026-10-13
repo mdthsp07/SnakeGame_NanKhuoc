@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace SnakeGame
 
         private void launchTimer()
         {
-            timer.Interval = 100;
+            timer.Interval = GameSettings.GetSnakeInterval(); ;
             timer.Tick -= move;  
             timer.Tick += move;
             timer.Start();

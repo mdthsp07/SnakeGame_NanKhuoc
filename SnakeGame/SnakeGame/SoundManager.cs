@@ -26,7 +26,6 @@ namespace SnakeGame
         // ===== CACHE ÂM THANH VÀO RAM =====
         private Dictionary<string, byte[]> soundCache = new Dictionary<string, byte[]>();
 
-        // Output riêng cho tiếng click (để chặn chồng chéo)
         private WaveOutEvent clickOutput;
         private WaveFileReader clickReader;
         private MemoryStream clickStream;
@@ -34,9 +33,11 @@ namespace SnakeGame
         public bool IsMusicOn { get; private set; } = true;
         public bool IsSoundOn { get; private set; } = true;
 
+        public bool IsMasterMuted { get; private set; } = false;
+
         public SoundManager()
         {
-            // Nạp sẵn các file âm thanh ngắn vào RAM ngay khi khởi động
+ 
             PreloadSound("click.wav");
             PreloadSound("eat.wav");
             PreloadSound("gameover.wav");
@@ -56,6 +57,16 @@ namespace SnakeGame
             catch { }
         }
 
+        public void SetMasterMute(bool mute)
+        {
+            IsMasterMuted = mute;
+            if (mute)
+            {
+                
+                StopBackground();
+            }
+        }
+
         // Tìm file ở thư mục gốc hoặc thư mục chạy (bin/Debug)
         private string ResolvePath(string fileName)
         {
@@ -70,6 +81,7 @@ namespace SnakeGame
         // ===== NHẠC NỀN (LOOP) =====
         public void PlayBackground(string filePath)
         {
+            if (IsMasterMuted) return;
             try
             {
                 StopBackground();
@@ -142,19 +154,20 @@ namespace SnakeGame
         // ===== PHÁT ÂM THANH NGẮN (TỪ RAM, KHÔNG DELAY) =====
         private void PlayOneShot(string fileName)
         {
+            if (IsMasterMuted) return;
             try
             {
                 byte[] data;
                 if (!soundCache.TryGetValue(fileName, out data))
                 {
-                    // Nếu chưa cache thì load và cache luôn
+
                     string path = ResolvePath(fileName);
                     if (path == null) return;
                     data = File.ReadAllBytes(path);
                     soundCache[fileName] = data;
                 }
 
-                // Chặn chồng chéo cho tiếng click: dừng cái cũ trước khi phát cái mới
+
                 if (fileName == "click.wav")
                 {
                     StopClick();
@@ -165,7 +178,7 @@ namespace SnakeGame
 
                 var output = new WaveOutEvent
                 {
-                    DesiredLatency = 100,   // Giảm độ trễ xuống 100ms (mặc định là 300ms)
+                    DesiredLatency = 100, 
                     NumberOfBuffers = 2
                 };
                 output.Init(reader);
