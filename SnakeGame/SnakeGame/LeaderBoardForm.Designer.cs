@@ -42,7 +42,7 @@
             this.BangDiem.ForeColor = System.Drawing.Color.SaddleBrown;
             this.BangDiem.FormattingEnabled = true;
             this.BangDiem.ItemHeight = 28;
-            this.BangDiem.Location = new System.Drawing.Point(52, 93);
+            this.BangDiem.Location = new System.Drawing.Point(43, 91);
             this.BangDiem.Margin = new System.Windows.Forms.Padding(0);
             this.BangDiem.Name = "BangDiem";
             this.BangDiem.Size = new System.Drawing.Size(334, 420);
@@ -70,12 +70,11 @@
             this.lblTitle.BackColor = System.Drawing.Color.SandyBrown;
             this.lblTitle.Font = new System.Drawing.Font("Tahoma", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.lblTitle.ForeColor = System.Drawing.Color.SaddleBrown;
-            this.lblTitle.Location = new System.Drawing.Point(56, 36);
+            this.lblTitle.Location = new System.Drawing.Point(68, 36);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(301, 41);
+            this.lblTitle.Size = new System.Drawing.Size(268, 40);
             this.lblTitle.TabIndex = 2;
             this.lblTitle.Text = "LEADERBOARD";
-            this.lblTitle.Click += new System.EventHandler(this.lblTitle_Click);
             // 
             // LeaderBoardForm
             // 
@@ -86,7 +85,9 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.BangDiem);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "LeaderBoardForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LeaderBoardForm";
             this.ResumeLayout(false);
             this.PerformLayout();

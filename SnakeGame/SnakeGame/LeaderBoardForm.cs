@@ -24,17 +24,10 @@ namespace SnakeGame
         public LeaderBoardForm(int playerCurrentScore = 0)
         {
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.StartPosition = FormStartPosition.CenterScreen;
+            
             this.currentScore = playerCurrentScore;
             CapNhatBangXepHang();
         }
-
-        private void LeaderBoardForm_Load(object sender, EventArgs e)
-        {
-            CapNhatBangXepHang();
-        }
-
         private void CapNhatBangXepHang()
         {
             BangDiem.Items.Clear();
@@ -48,7 +41,7 @@ namespace SnakeGame
                 new NguoiChoi { Ten = "Kiwi", Diem = 3}
             };
 
-            int playerScore = readScore();
+            int playerScore = GetHighScore();
 
             danhSach.Add(new NguoiChoi { Ten = "Bạn", Diem = playerScore });
 
@@ -77,17 +70,15 @@ namespace SnakeGame
             BangDiem.Items.Add($" Highest score: " + playerScore + " điểm");
             BangDiem.Items.Add($" Last Score: " + currentScore + " điểm");
         }
-
-        private int readScore()
+       
+        public static int GetHighScore()
         {
-            if (!File.Exists(filePath)) return 0;
-
-            string line = File.ReadAllText(filePath);
+            string path = "highscore.txt";
+            if (!File.Exists(path)) return 0;
             int diem = 0;
-            int.TryParse(line, out diem);
+            int.TryParse(File.ReadAllText(path), out diem);
             return diem;
         }
-
         public static void Save(int newScore)
         {
             string path = "highscore.txt";
@@ -111,11 +102,6 @@ namespace SnakeGame
         }
 
         private void BangDiem_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblTitle_Click(object sender, EventArgs e)
         {
 
         }

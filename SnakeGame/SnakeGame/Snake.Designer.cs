@@ -40,12 +40,13 @@
             this.lblScore.Size = new System.Drawing.Size(124, 27);
             this.lblScore.TabIndex = 0;
             this.lblScore.Text = "Score: 0";
+            this.lblScore.Click += new System.EventHandler(this.lblScore_Click);
             // 
             // lblFood
             // 
             this.lblFood.AutoSize = true;
             this.lblFood.BackColor = System.Drawing.Color.Red;
-            this.lblFood.Location = new System.Drawing.Point(374, 200);
+            this.lblFood.Location = new System.Drawing.Point(628, 217);
             this.lblFood.Name = "lblFood";
             this.lblFood.Size = new System.Drawing.Size(26, 27);
             this.lblFood.TabIndex = 1;
@@ -60,9 +61,9 @@
             this.Controls.Add(this.lblScore);
             this.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.Name = "Snake";
-            this.KeyPreview = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Snake_KeyDown);
             this.ResumeLayout(false);

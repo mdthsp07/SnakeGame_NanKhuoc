@@ -125,6 +125,11 @@ namespace SnakeGame
             lblFood.Top = (available[idx] * 20) / Width * 20;
         }
 
+        private void lblScore_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private bool hits(int x, int y)
         {
             if (visit[x, y])
@@ -170,10 +175,8 @@ namespace SnakeGame
         // ==================== GAME OVER ====================
         private void ShowGameOver()
         {
-            LeaderBoardForm.Save(score);
-
-            int highScore = score;
-
+            LeaderBoardForm.Save(score);                   
+            int highScore = LeaderBoardForm.GetHighScore(); 
 
             using (GameOverForm gameOver = new GameOverForm(score, highScore))
             {
