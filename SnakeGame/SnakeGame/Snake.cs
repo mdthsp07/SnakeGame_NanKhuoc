@@ -23,6 +23,10 @@ namespace SnakeGame
         private Image bodyImage;
         private Image tailImage;
         private Image foodImage;
+<<<<<<< HEAD
+=======
+        private Image bombImage;
+>>>>>>> origin/master
         private Image giftImage;
 
         // ===== HỘP QUÀ =====
@@ -32,6 +36,13 @@ namespace SnakeGame
         private const int GIFT_LIFETIME_MS = 5000;
         private const int GIFT_BONUS = 5;
         private const int GIFT_SPAWN_CHANCE = 15;
+        private const int BOMB_SPAWN_CHANCE = 15;
+        private bool isBombActive = false;
+<<<<<<< HEAD
+=======
+        private const int BOMB_SPAWN_CHANCE = 15;
+        private bool isBombActive = false;
+>>>>>>> origin/master
 
         public Snake()
         {
@@ -51,6 +62,10 @@ namespace SnakeGame
                 bodyImage = Properties.Resources.snake_body;
                 tailImage = Properties.Resources.snake_tail;
                 foodImage = Properties.Resources.apple;
+<<<<<<< HEAD
+=======
+                bombImage = Properties.Resources.daaece34463f6b599008ced4b7c0c280;
+>>>>>>> origin/master
                 giftImage = Properties.Resources.gift_box;
 
                 Image origHead = Properties.Resources.snake_head;
@@ -155,6 +170,19 @@ namespace SnakeGame
                 return;
             }
 
+<<<<<<< HEAD
+=======
+            // If moving into a bomb, immediate game over
+            if (collisionBomb(x + dx, y + dy))
+            {
+                timer.Stop();
+                sound.PlayGameOver("gameover.wav");
+                sound.StopBackground();
+                ShowGameOver();
+                return;
+            }
+
+>>>>>>> origin/master
             bool ateFood = collisionFood(x + dx, y + dy);
             bool ateGift = isGiftActive &&
                            (x + dx) == picGift.Location.X &&
@@ -190,6 +218,33 @@ namespace SnakeGame
 
                 if (ateFood) randomFood();
 
+<<<<<<< HEAD
+=======
+                // After food spawn, possibly spawn a bomb at a different available cell
+                if (!isBombActive && rand.Next(100) < BOMB_SPAWN_CHANCE)
+                {
+                    // pick a free cell different from current food
+                    List<int> free = new List<int>(available);
+                    if (free.Count > 0)
+                    {
+                        // remove current food position (just in case)
+                        int foodPos = (picFood.Top / 20) * cols + (picFood.Left / 20);
+                        free.RemoveAll(v => v == foodPos);
+                        if (free.Count > 0)
+                        {
+                            int bidx = rand.Next(free.Count);
+                            int pos = free[bidx];
+                            picBomb.Left = (pos * 20) % Width;
+                            picBomb.Top = (pos * 20) / Width * 20;
+                            picBomb.Image = bombImage;
+                            picBomb.Visible = true;
+                            picBomb.BringToFront();
+                            isBombActive = true;
+                        }
+                    }
+                }
+
+>>>>>>> origin/master
                 // 15% cơ hội sinh hộp quà sau khi ăn thức ăn thường
                 if (ateFood && !isGiftActive && rand.Next(100) < GIFT_SPAWN_CHANCE)
                 {
@@ -289,6 +344,14 @@ namespace SnakeGame
             return x == picFood.Location.X && y == picFood.Location.Y;
         }
 
+<<<<<<< HEAD
+=======
+        private bool collisionBomb(int x, int y)
+        {
+            return isBombActive && x == picBomb.Location.X && y == picBomb.Location.Y;
+        }
+
+>>>>>>> origin/master
         private bool hits(int x, int y)
         {
             if (x < 0 || y < 0 || x >= rows || y >= cols) return false;
